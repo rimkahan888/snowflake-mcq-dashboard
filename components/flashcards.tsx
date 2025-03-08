@@ -17,6 +17,7 @@ export function Flashcards() {
   const [showAnswers, setShowAnswers] = useState(false)
   const [filteredCards, setFilteredCards] = useState<FlashcardData[]>(flashcardsData)
   const [activeTab, setActiveTab] = useState("all")
+  const [isScrolled, setIsScrolled] = useState(false)
 
   // Load favorites from localStorage on component mount
   useEffect(() => {
@@ -30,6 +31,18 @@ export function Flashcards() {
   useEffect(() => {
     localStorage.setItem("flashcard-favorites", JSON.stringify(favorites))
   }, [favorites])
+
+  // Add scroll event listener to track when user scrolls past the original toggle
+  useEffect(() => {
+    const handleScroll = () => {
+      // Get the position of the original toggle section
+      const headerHeight = 150 // Approximate height of the header section
+      setIsScrolled(window.scrollY > headerHeight)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   // Filter cards based on search query and active tab
   useEffect(() => {
@@ -63,6 +76,18 @@ export function Flashcards() {
 
   return (
     <div className="container mx-auto py-6 px-4">
+      {/* Sticky toggle that appears when scrolled */}
+      {isScrolled && (
+        <div className="fixed top-0 right-0 z-50 p-4 bg-background/80 backdrop-blur-sm border-b w-full shadow-sm">
+          <div className="container mx-auto flex justify-end">
+            <div className="flex items-center space-x-2">
+              <Switch id="sticky-show-answers" checked={showAnswers} onCheckedChange={setShowAnswers} />
+              <Label htmlFor="sticky-show-answers">Show Answers</Label>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col space-y-4 md:flex-row md:justify-between md:space-y-0 mb-6">
         <h1 className="text-2xl font-bold">Snowflake MCQ Flashcards</h1>
         <div className="flex items-center space-x-2">
