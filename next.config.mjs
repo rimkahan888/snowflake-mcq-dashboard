@@ -22,7 +22,7 @@ const nextConfig = {
     parallelServerCompiles: true,
   },
 }
-
+   
 mergeConfig(nextConfig, userConfig)
 
 function mergeConfig(nextConfig, userConfig) {
