@@ -9,7 +9,7 @@ export interface FlashcardData {
   question: string
   options: FlashcardOption[]
 }
- 
+  
 export const flashcardsData: FlashcardData[] = [
   {
     id: 1,
